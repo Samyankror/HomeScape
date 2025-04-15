@@ -7,7 +7,7 @@ const app = express();
 const DbName='mern-estate'
 mongoose.connect(process.env.MONGO)
 .then(()=>{
-    console.log('connected to mongodb');
+    console.log('connected to mongodb successfully');
 })
 .catch((err)=>{
     console.log(err);
