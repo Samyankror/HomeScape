@@ -22,7 +22,7 @@ const handleChange = (e)=>{
     
      try{
       setLoading(true)
-     const res = await fetch('api/auth/signup',{
+     const res = await fetch('api/auth/signUp',{
       method : 'POST',
       headers : {
          'Content-Type': 'application/json'
@@ -69,15 +69,15 @@ const handleChange = (e)=>{
             className=" p-3 bg-white  rounded-lg outline-none"
             id="password"
             onChange={handleChange}
-           // autoComplete="new-password"
+         
              />
             <button disabled={loading} className="bg-slate-700 p-3 text-white rounded-lg font-semibold hover:opacity-85"
             >{loading?'...loading':'SIGN UP'}</button>
-            {/* <button>CONTINUE WITH GOOGLE</button> */}
+         
          </form>
          <div className=' flex gap-2 mt-5'>
             <p className="font-semibold">Have an account?</p>
-            <Link ><span className="text-blue-700 font-semibold">Sign in</span></Link>
+            <Link to={'/sign-in'} ><span className="text-blue-700 font-semibold">Sign in</span></Link>
          </div>
 
          <div>
