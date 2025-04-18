@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/errorHandler.js'
 import jwt from 'jsonwebtoken'
 
+
 export const signUp = async(req,res,next)=>{
     console.log(req.body)
     const {username, email, password} = req.body
@@ -50,4 +51,44 @@ export const signIn = async(req,res,next)=>{
     next(error)
    }
 
+}
+
+
+export const google = async(req,res,next)=>{
+    try{
+      const user = await User.findOne({email:req.body.email})
+      if(user){
+
+        console.log('yes')
+        const token = jwt.sign({id : user._id},process.env.JWT_SECRET)
+        const {password : pass,...rest} = user._doc
+        return res
+        .cookie('accessToken',token,{httpOnly:true})
+        .status(200)
+        .json({
+            success : true,
+            rest
+        })
+      } 
+      else{
+        console.log('No')
+        const generatePassword = Math.random().toString(36).slice(-8) + Math.random.toString(36).slice(-8)
+        const hashedPassword = bcryptjs.hashSync(generatePassword,10)
+        const newUser = new User({username : req.body.name.split(" ").join("").toLowerCase()+Math.random().toString(36).slice(-4),
+        email:req.body.email,password:hashedPassword,avatar : req.body.photo })
+       await newUser.save();
+       const token = jwt.sign({id : newUser._id},process.env.JWT_SECRET)
+        const {password : pass,...rest} = newUser._doc
+        return res
+        .cookie('accessToken',token,{httpOnly:true})
+        .status(200)
+        .json({
+            success : true,
+            rest
+        })
+      }
+      
+    }catch(error){
+        next(error)
+    }
 }
