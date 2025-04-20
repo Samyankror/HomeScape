@@ -2,8 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {signInStart, signInSuccess,signInFailure} from "../redux/user/userSlice";
-import GoogleAuth from "../components/GoogleAuth";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 function SignIn() {
   const [formData, setFormData] = useState({});
@@ -67,7 +71,7 @@ function SignIn() {
         >
           {loading ? "...loading" : "SIGN IN"}
         </button>
-        <GoogleAuth />
+        <OAuth />
       </form>
       <div className=" flex gap-2 mt-5">
         <p className="font-semibold">Don't have an account?</p>

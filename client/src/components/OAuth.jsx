@@ -7,7 +7,7 @@ import { signInSuccess } from "../redux/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
 
 
-function GoogleAuth(){
+function OAuth(){
       const dispatch = useDispatch()
       const navigate = useNavigate()
     const handleGoogleAuth = async()=>{
@@ -24,7 +24,7 @@ function GoogleAuth(){
               body : JSON.stringify({name: result.user.displayName, email : result.user.email,photo:result.user.photoURL})
       })
       
-      const data = res.json();
+      const data = await res.json();
       console.log(data);
       dispatch(signInSuccess(data))
       navigate('/')
@@ -42,4 +42,4 @@ function GoogleAuth(){
     )
 }
 
-export default GoogleAuth;
+export default OAuth;
