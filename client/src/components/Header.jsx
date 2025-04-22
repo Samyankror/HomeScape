@@ -33,14 +33,11 @@ function Header(){
                 
                <Link to='/profile' >{ currUser ?
     
-                    <img className ="rounded-full w-7 h-7" src={currUser.rest.avatar} alt="profile" />
+                    <img className ="rounded-full w-7 h-7" src={currUser.user.avatar} alt="profile" />
                 :
                <li className=' text-slate-700 hover:underline font-semibold'> Sign in</li>
 }
                     </Link>
-                
-
-
             </ul>
             <button>
                 
