@@ -1,4 +1,4 @@
-import User from "../models/user.models.js";
+import User from "../models/user.model.js";
 import { errorHandler } from "../utils/errorHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 

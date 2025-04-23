@@ -1,36 +1,45 @@
 import React, { useEffect, useRef , useState} from "react";
 import {useDispatch, useSelector} from 'react-redux'
-import { updateUserStart,updateUserSuccess,updateUserFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure, signInFailure, signInSuccess } from "../redux/user/userSlice";
+import { updateUserStart,updateUserSuccess,updateUserFailure,
+  deleteUserStart,deleteUserSuccess,deleteUserFailure,
+  signOutSuccess,signOutFailure,signOutStart} from "../redux/user/userSlice";
 
  
 function Profile(){
-    const {currUser} = useSelector(state=>state.user)
+    const {currUser,loading,error} = useSelector(state=>state.user)
       const fileRef = useRef(null);
       const [file,setFile] = useState(null);
       const [formData,setFormData] = useState({})
       const [profile,setProfile] = useState(currUser.user.avatar);
+      const[fileUploadError,setFileUploadError] = useState(null);
+      const [uploadStart,setUploadStart] = useState(null);
       const dispatch = useDispatch();
-      
+      const MAX_FILE_SIZE = 3 * 1024 * 1024; 
       const uploadImage = async()=>{
         if(!file) return;
-
+        
+        if(file.size>MAX_FILE_SIZE){
+          setFileUploadError(true)
+          return;
+        }
         const formData = new FormData()
         formData.append("avatar",file);
         try {
+          setUploadStart(true);
             const res = await fetch('/api/user/uploadProfileImage', {
               method: "POST",
               body: formData,
             });
     
             const data = await res.json();
-           console.log("Uploaded image URL:", data.imageUrl);
-
           
             setFormData((prev) => ({ ...prev, avatar: data.imageUrl }));
             setProfile(data.imageUrl)
+            setFileUploadError(false);
+            setUploadStart(false);
           
-          } catch (err) {
-            console.error("Image upload failed", err);
+          } catch (error) {
+           setFileUploadError(true);
           }
       }
        useEffect(()=>{
@@ -41,6 +50,17 @@ function Profile(){
          setFormData({...formData,[e.target.id]:e.target.value})
         
       }
+
+      useEffect(()=>{
+        if(!uploadStart && fileUploadError===false){
+           const timer = setTimeout(()=>{
+            setFileUploadError(null);
+           },4000)
+
+            return ()=>clearTimeout(timer);
+        }   
+       
+      },[fileUploadError,uploadStart])
 
       const handleSubmit = async(e)=>{
         
@@ -58,7 +78,6 @@ function Profile(){
             const data = await res.json();
            
             if(!data.success){
-              console.log('error inside')
               dispatch(updateUserFailure(data.message));
               return ;
             }
@@ -71,7 +90,7 @@ function Profile(){
       }
 
       const handleDeleteUser = async() =>{
-        console.log('hello')
+       
         try{
            dispatch(deleteUserStart())
            const res = await fetch(`/api/user/delete/${currUser.user._id}`,{
@@ -79,18 +98,31 @@ function Profile(){
            })
            const data = await res.json();
            if(!data.success){
-             console.log('haanji')
               dispatch(deleteUserFailure(data.message));
-              // console.log(res.message);
                return;
            }
-           console.log(res);
+          
            dispatch(deleteUserSuccess())
-           
+
            
         } catch(error){
-          console.log(error.message);
+         
            dispatch(deleteUserFailure(error.message));
+        }
+      } 
+
+      const handleSignOut = async()=>{
+        try{
+           dispatch(signOutStart());
+           const res = await fetch('/api/auth/signout')
+           const data = await res.json();
+           if(!data.success){
+            dispatch(signOutFailure(data.message));
+            return;
+           }
+           dispatch(signOutSuccess());
+        } catch(error){
+            dispatch(signOutFailure(error.messsage));
         }
       }
  
@@ -105,12 +137,19 @@ function Profile(){
                    accept="image/*"
                    onChange={(e) => setFile(e.target.files[0])}
              />
-                {/* <img src={currUser.rest.avatar} */}
+                
                 <img src={profile}
                 onClick={()=>fileRef.current.click()}
                  alt=""
                   className="rounded-full w-24 h-24 self-center object-cover cursor-pointer "
                   />
+                  <p className="text-sm self-center">{fileUploadError? 
+                  (
+                    <span className = "text-red-700">Error Image upload image must be less than 3mb</span>
+                  ) : uploadStart ?  (
+                  <span className="text-blue-700">Uploading... Please wait.</span> 
+                  ) : fileUploadError===false ? (<span className="text-green-700">Image uploaded successfully</span>
+                  ) : null }</p>
                 <input 
                 type="text"
                 placeholder="username" 
@@ -135,13 +174,18 @@ function Profile(){
                  className=" p-3 bg-white  rounded-lg outline-blue-500"
                  onChange={handleChange}
                   />
-
-               <button className="bg-slate-700 uppercase p-3 font-semibold text-white rounded-lg
-                hover:opacity-90">Update</button>
+                
+               <button disabled={loading} className="bg-slate-700 uppercase p-3 font-semibold text-white rounded-lg
+                hover:opacity-90 disabled:opacity-75">{loading ? 'Loading..' : 'Update'}</button>
               </form>
               <div className="flex justify-between mt-5">
-                <span className = "text-red-700 cursor-pointer font-semibold" onClick={handleDeleteUser}>Delete Account</span>
-                <span className = "text-red-700 cursor-pointer font-semibold">Sign Out</span>
+                <span 
+                className = "text-red-700 cursor-pointer font-semibold" 
+                onClick={handleDeleteUser}>Delete Account</span>
+                <span
+                 className = "text-red-700 cursor-pointer font-semibold"
+                 onClick={handleSignOut}
+                 >Sign Out</span>
               </div>
 
               

@@ -1,4 +1,4 @@
-import User from '../models/user.models.js'
+import User from '../models/user.model.js'
 import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/errorHandler.js'
 import jwt from 'jsonwebtoken'
@@ -92,4 +92,17 @@ export const google = async(req,res,next)=>{
     }catch(error){
         next(error)
     }
+}
+
+
+export const signOut = async(req,res,next)=>{
+     try{
+       res
+       .clearCookie('accessToken',{httpOnly:true})
+       .status(200)
+       .json({success:true,message:'user has been logout'})
+      
+     } catch(error){
+      next(error);
+     }
 }
