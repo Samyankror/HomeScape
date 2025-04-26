@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/errorHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import Listing from "../models/listing.model.js";
 
 export const test = (req, res) => {
     res.json({
@@ -37,21 +38,7 @@ export const test = (req, res) => {
   }
 
 
-  export const uploadProfileImage = async(req,res,next)=>{
-    
-     const avatarPath=req.file.path;
   
-     let avatar = "";
-     try{
-       avatar = await uploadOnCloudinary(avatarPath);
-      
-     } catch(error){
-       console.log("Error uploading avatar",error)
-     }
-    
-   
-     res.status(200).json({success : true,imageUrl:avatar.url});
-  }
 
   export const deleteUser  = async (req,res,next) =>{
           if(req.params.id!=req.user.id) {
@@ -66,4 +53,18 @@ export const test = (req, res) => {
           } catch(error){ 
              next(error)
           }
+  }
+
+
+  export const getUserListing = async(req,res,next)=>{
+        if(req.user.id!=req.params.id){
+          return next(errorHandler(401,'You can only view your own listing'))
+        }
+
+        try{
+            const listings = await Listing.find({userRef: req.params.id})
+            res.status(200).json(listings);
+        } catch(error){
+          next(error);
+        }
   }

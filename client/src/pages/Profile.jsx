@@ -23,10 +23,10 @@ function Profile(){
           return;
         }
         const formData = new FormData()
-        formData.append("avatar",file);
+        formData.append("image",file);
         try {
           setUploadStart(true);
-            const res = await fetch('/api/user/uploadProfileImage', {
+            const res = await fetch('/api/upload/image', {
               method: "POST",
               body: formData,
             });
