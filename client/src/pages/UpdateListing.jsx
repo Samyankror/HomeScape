@@ -1,9 +1,10 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
- function CreateListing(){
+
+ function UpdateListing(){
         const [file,setFile] = useState([]);
         const {currUser} = useSelector(state=>state.user)
         const [imageUploadError,setImageUploadError] = useState(false);
@@ -24,12 +25,32 @@ import { useNavigate } from 'react-router-dom';
              parking : false,
              furnished : false,
         })
-        
+        const params = useParams();
+        useEffect(()=>{
+             const fetchListing = async()=>{
+                const listingId = params.listingId
+                console.log(listingId);
+                const res = await fetch(`/api/listing/get/${listingId}`,{
+                    method : 'GET'
+                });
+                
+                const data = await res.json();
+                console.log(data)
+                if(!data.success){
+                    console.log(data.message)
+                   return;
+                }
+
+                setFormData(data.listing)
+             }
+             fetchListing();
+        },[])
+
         const navigate = useNavigate()
         const handleImageSubmit = async()=>{
              setUpload(true)
               const newUrls=[]
-              const len = Math.min(7 - formData.imageUrls.length, file.length); 
+              const len=Math.min(7-formData.imageUrls.length,file.length);
             for(let idx=0;idx<len;idx++){
                  const formData = new FormData();
                  formData.append('image',file[idx]);
@@ -56,9 +77,7 @@ import { useNavigate } from 'react-router-dom';
              setUpload(false)
         }
 
-        // useEffect(() => {
-        //     console.log('Upload changed to:', upload);
-        //   }, [upload]);
+      
         const handleRemoveImage = (index)=>{
             const updatedUrls = formData.imageUrls.filter((_,idx)=>idx!=index);
             setFormData({...formData,imageUrls:updatedUrls})
@@ -76,7 +95,7 @@ import { useNavigate } from 'react-router-dom';
                 setFormData({...formData,[e.target.id] : e.target.value})
               }
         }
-        // console.log(formData);
+        
 
         const handleSubmit = async(e)=>{
              e.preventDefault();
@@ -88,9 +107,9 @@ import { useNavigate } from 'react-router-dom';
                     return setError('Discount price should be lower than regular price')
 
                 setLoading(true)
-                setError(false)
-
-                const res = await  fetch('/api/listing/create',{
+                setError(false) 
+               console.log(  params.listingId)
+                const res = await  fetch(`/api/listing/update/${params.listingId}`,{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -104,10 +123,9 @@ import { useNavigate } from 'react-router-dom';
                  setLoading(false)
                  const data=await res.json();
                  console.log(data,"he")
-                 navigate(`/listing/${data._id}`)
+               navigate(`/listing/${data._id}`)
              }catch(error){
-                 setError('error')
-                 console.log('error inside',error.message)
+                 setError(error.message)
                  setLoading(false)
              }
         }
@@ -115,7 +133,7 @@ import { useNavigate } from 'react-router-dom';
         
     return (
         <main className="max-w-4xl mx-auto p-3">
-            <h1  className="text-center text-3xl font-bold my-7">Create a Listing</h1>
+            <h1  className="text-center text-3xl font-bold my-7">Update a Listing</h1>
              <form onSubmit={handleSubmit}  className="flex flex-col sm:flex-row gap-4" >
                 <div className="flex flex-col gap-4 flex-1">
                     <input 
@@ -277,7 +295,7 @@ import { useNavigate } from 'react-router-dom';
                  
                 <button  disabled={upload || loading}
                 className="my-4 p-3 bg-slate-700  text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-55">
-                    {loading ? 'Creating...' : 'Create Listing'}</button>
+                    {loading ? 'Updating...' : 'Update Listing'}</button>
 
                     <p className="text-red-700">{error}</p>
                 </div>
@@ -288,4 +306,4 @@ import { useNavigate } from 'react-router-dom';
     )
 }
 
-export default CreateListing
+export default UpdateListing

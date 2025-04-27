@@ -13,6 +13,8 @@ function Profile(){
       const [profile,setProfile] = useState(currUser.user.avatar);
       const[fileUploadError,setFileUploadError] = useState(null);
       const [uploadStart,setUploadStart] = useState(null);
+      const [userListings,setUserListings] = useState([]);
+      const [showListingError,setShowListingError] = useState(false);
       const dispatch = useDispatch();
       const MAX_FILE_SIZE = 3 * 1024 * 1024; 
       const uploadImage = async()=>{
@@ -125,7 +127,38 @@ function Profile(){
             dispatch(signOutFailure(error.messsage));
         }
       }
- 
+
+      const handleShowListing = async()=>{
+          try{
+            setShowListingError(false)
+            const res = await fetch(`/api/user/listings/${currUser.user._id}`)
+            const data = await res.json();
+            if(!data.success){
+              setShowListingError(true);
+              return;
+            }
+            setUserListings(data.listings);
+          }catch(error){
+            setShowListingError(true)
+          }
+      }
+      const handleDeleteListing = async(listingId)=>{
+          try{
+             const res = await fetch(`/api/listing/delete/${listingId}`,{
+              method: 'DELETE',
+            })
+            const data = await res.json();
+             if(!data.success){
+              console.log(data.message)
+              return;
+             }
+
+             setUserListings((prev)=>prev.filter((listing)=>listing._id!==listingId))
+          } catch(error){
+
+          }
+      }
+        console.log(userListings)
      return (
         <>
         <div className="p-3 max-w-lg mx-auto mt-7">
@@ -192,7 +225,43 @@ function Profile(){
                  >Sign Out</span>
               </div>
 
-              
+              <button onClick={handleShowListing}
+               className='text-green-700 mt-5 w-full'>Show Listing</button>
+                
+                <p className='text-red-700 mt-5'>
+                  {showListingError ?  'Error showing listings' : ''}</p>
+
+                { userListings && userListings.length>0 &&  (
+                  <div className="flex flex-col gap-4">
+                    <h1 className='text-center mt-7 text-2xl font-semibold'
+                     >User Listing</h1>
+
+                    {userListings.map((listing)=>(
+                       <div key={listing._id} className="flex gap-4">
+                        <Link to={`/listing/${listing._id}`}>
+                        <img src={listing.imageUrls[0]} 
+                        alt='listing cover'
+                        className='h-16 w-16 object-contain' />
+                        </Link>
+
+                        <Link to={`/listing/${listing._id}`}
+                         className='text-slate-700 font-semibold  hover:underline truncate flex-1 '>
+                          <p>{listing.name}</p>
+                        </Link>
+
+                        <div className='flex flex-col  gap-1 items-center '>
+                          <button onClick={()=>handleDeleteListing(listing._id)}
+                          className='bg-red-700 text-white uppercase  px-2 py-1 rounded-lg text-xs font-semibold'>Delete</button>
+                          <Link to={`/update-listing/${listing._id}`}>
+                          <button  className='bg-green-700 text-white uppercase px-2 py-1 rounded-lg text-xs font-semibold'>Update</button>
+                          </Link>
+                        </div>
+                       </div>
+                    ))}
+                  </div>
+
+              )
+                }
             
         </div>
         </>
