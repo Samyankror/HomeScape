@@ -123,7 +123,7 @@ import { useNavigate, useParams } from 'react-router-dom';
                  setLoading(false)
                  const data=await res.json();
                  console.log(data,"he")
-               navigate(`/listing/${data._id}`)
+               navigate(`/listing/${data.updatedListing._id}`)
              }catch(error){
                  setError(error.message)
                  setLoading(false)
