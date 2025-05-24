@@ -47,7 +47,8 @@ import { useNavigate, useParams } from 'react-router-dom';
         },[])
 
         const navigate = useNavigate()
-        const handleImageSubmit = async()=>{
+        const handleImageSubmit = async(e)=>{
+            e.preventDefault();
              setUpload(true)
               const newUrls=[]
               const len=Math.min(7-formData.imageUrls.length,file.length);

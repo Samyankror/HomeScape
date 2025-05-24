@@ -1,12 +1,20 @@
 import react, { useEffect,useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore from 'swiper';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation'; 
+
 
 
 function Listing(){
+     SwiperCore.use([Navigation]);
     const [listing,setListing] = useState(null);
 const [loading,setLoading] = useState(false);
 const [error,setError] = useState(false);
  const params = useParams();
+ 
 useEffect(()=>{
     const fetchListing = async()=>{
      try{
@@ -20,7 +28,7 @@ useEffect(()=>{
             setLoading(false);
             return;
         }
-        setListing(data);
+        setListing(data.listing);
         setLoading(false);
         console.log(data);
         
@@ -32,9 +40,22 @@ useEffect(()=>{
     }
     fetchListing();
 },[params.listingId])
+console.log(listing);
     return (
          <main>
-            <div>{loading ? 'loading...' : "helo"}</div>
+           {loading && <p>Loading...</p>}
+           {error && <p>Something went wrong!</p>}
+           {listing && !loading && !error && (
+             <div>
+                 <Swiper navigation>
+                    {listing.imageUrls.map((url)=>(
+                        <SwiperSlide key={url}>
+                        <img src={url} alt="" className='w-full h-[550px] object-cover'/>
+                        </SwiperSlide>
+                    ))}
+                 </Swiper>
+             </div>
+           )}
          </main>
     )
 }
