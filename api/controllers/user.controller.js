@@ -3,6 +3,7 @@ import { errorHandler } from "../utils/errorHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import Listing from "../models/listing.model.js";
 
+
 export const test = (req, res) => {
     res.json({
       message: 'Api route is working!',
@@ -69,5 +70,26 @@ export const test = (req, res) => {
         } catch(error){
           next(error);
         }
+  }
+
+
+  export const getUser = async(req,res,next)=>{
+     try{
+         console.log("REQ PARAMS:", req.params.id);
+
+      const user = await User.findById(req.params.id);
+       
+         console.log("USER:", user);
+
+       if(!user) return errorHandler(404,'user not found')
+       
+     
+
+        const {password,...rest} = user._doc;
+
+        return res.status(200).json(rest);
+     }catch(error){
+      next(error);
+     }
   }
 
