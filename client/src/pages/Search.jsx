@@ -119,7 +119,7 @@ function Search(){
         
         <div className='flex flex-col sm:flex-row'>
             <div className=' border-b-2 sm:border-r-2  sm:min-h-screen p-7'>
-                <form onSubmit={handleSubmit} className='flex flex-col gap-8 items-center'>
+                <form onSubmit={handleSubmit} className='flex flex-col gap-8 items-cen'>
 
                       <div className='flex items-center gap-2'>
                     <label htmlFor="searchTerm" className='font-semibold'>Search Term:</label>
