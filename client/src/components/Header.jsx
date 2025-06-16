@@ -31,8 +31,8 @@ function Header(){
             <div className = "flex flex-col  gap-3 sm:flex-row justify-between items-center max-w-6xl mx-auto p-3">
                 <Link to='/'>
             <h1 className="font-bold text-xl">
-                <span className="text-slate-500">Samyank</span>
-                <span className="text-slate-700">Estate</span>
+                <span className="text-slate-500">True</span>
+                <span className="text-slate-700">Roof</span>
             </h1>
             </Link>
             <form  onSubmit={handleSubmit}

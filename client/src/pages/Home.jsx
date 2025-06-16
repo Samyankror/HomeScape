@@ -20,6 +20,7 @@ function Home(){
            try{
           const res = await fetch('/api/listing/get?offer=true&limit=4');
           const data =await  res.json();
+         
            setOfferListings(data);
            fetchRentListings();
 
@@ -53,9 +54,7 @@ function Home(){
      fetchOfferListings();
 }    ,[])
 
-console.log(offerListings,'offer');
-console.log(rentListings,'rent');
-console.log(saleListings,'sake');
+console.log(saleListings,'sale');
 
 
     return (
@@ -114,7 +113,7 @@ console.log(saleListings,'sake');
                 {saleListings && saleListings.length>0 && (
                     <div >
                         <div className="">
-                        <h2  className='text-2xl font-semibold text-slate-600 my-3'>Recently Listed places for rent</h2>
+                        <h2  className='text-2xl font-semibold text-slate-600 my-3'>Recently Listed places for Sale</h2>
                         <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
                          </div>
                          <div className='flex  flex-col sm:flex-row sm:flex-wrap gap-4'>

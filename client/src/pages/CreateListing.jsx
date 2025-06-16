@@ -64,7 +64,7 @@ import { useNavigate } from 'react-router-dom';
             setFormData({...formData,imageUrls:updatedUrls})
         }
         const handleChange = (e)=>{
-              if(e.target.id==='sell' || e.target.id==='rent'){
+              if(e.target.id==='sale' || e.target.id==='rent'){
                 setFormData({...formData,type:e.target.id})
               }
 
@@ -149,9 +149,9 @@ import { useNavigate } from 'react-router-dom';
 
                     <div className='flex gap-6  flex-wrap'>
                        <div className="flex gap-2">
-                      <input type="checkbox" id="sell" className="w-5" 
-                      onChange={handleChange} checked={formData.type==='sell'}/>
-                      <label htmlFor="sell" className=" text-md font-semibold">Sell</label>
+                      <input type="checkbox" id="sale" className="w-5" 
+                      onChange={handleChange} checked={formData.type==='sale'}/>
+                      <label htmlFor="sale" className=" text-md font-semibold">Sale</label>
                       </div>
 
                       <div className="flex gap-2">
@@ -209,7 +209,7 @@ import { useNavigate } from 'react-router-dom';
                             <input 
                             type="number"
                              min='50'
-                              max='100000' 
+                              max='10000000' 
                                id="regularPrice"
                              className="p-3 border border-gray-300 rounded-lg bg-white " 
                             required
@@ -227,7 +227,7 @@ import { useNavigate } from 'react-router-dom';
                             <input 
                             type="number" 
                             min='1' 
-                            max='10' 
+                            max='100000' 
                              id="discountPrice"
                              className="p-3 border border-gray-300 rounded-lg bg-white " 
                              onChange={handleChange}
