@@ -31,17 +31,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 app.use("/api/upload", uploadImageRouter);
 
-app.use(express.static(path.join(__dirname,'client/dist')));
-app.get('*',(req,res)=>{
-  res.sendFile(path.join(__dirname,'client','dist','index.html'));
-})
+app.use(express.static(path.join(__dirname,'/client/dist')));
 
 app.use((req, res, next) => {
-  res.status(404).json({
-    success: false,
-    message: "Route not found",
-  });
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
+
+
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -53,6 +49,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+app.listen(process.env.PORT, () => {
+  console.log("Server is running on port 3002");
 });
