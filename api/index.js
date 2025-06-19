@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const DbName = "mern-estate";
+
 mongoose
   .connect(process.env.MONGO)
   .then(() => {
@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
   return res.status(statusCode).json({
@@ -50,5 +50,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log("Server is running on port 3002");
+  console.log("Server is running on port 3000");
 });

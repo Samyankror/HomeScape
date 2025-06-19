@@ -53,7 +53,7 @@ function Home(){
      fetchOfferListings();
 }    ,[])
 
-console.log(saleListings,'sale');
+
 
 
     return (

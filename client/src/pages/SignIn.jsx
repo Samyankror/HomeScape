@@ -67,7 +67,7 @@ function SignIn() {
         />
         <button
           disabled={loading}
-          className="bg-slate-700 p-3 text-white rounded-lg font-semibold hover:opacity-85"
+          className="bg-slate-700 p-3 text-white rounded-lg font-semibold hover:opacity-85 cursor-pointer"
         >
           {loading ? "...loading" : "SIGN IN"}
         </button>

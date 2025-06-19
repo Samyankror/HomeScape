@@ -23,6 +23,7 @@ function OAuth(){
               },
               body : JSON.stringify({name: result.user.displayName, email : result.user.email,photo:result.user.photoURL})
       })
+
       
       const data = await res.json();
      
@@ -35,7 +36,7 @@ function OAuth(){
     }
     return(
         <button  type = 'button'
-        className = 'text-white bg-red-700 p-3 rounded-lg font-semibold uppercase hover:opacity-90'
+        className = 'text-white bg-red-700 p-3 rounded-lg font-semibold uppercase hover:opacity-90 cursor-pointer'
         onClick={handleGoogleAuth}>
             continue with google
         </button>
