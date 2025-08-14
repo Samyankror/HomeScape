@@ -47,7 +47,6 @@ import { useNavigate } from 'react-router-dom';
                    
                  } catch(error){
                      setImageUploadError(true)
-                     console.error('Error uploading image:', error.message);
                      break
                  }
             }

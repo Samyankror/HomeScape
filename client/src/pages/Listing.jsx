@@ -30,7 +30,6 @@ const [error,setError] = useState(false);
 useEffect(()=>{
     const fetchListing = async()=>{
      try{
-        // console.log(params.listingId);
         setLoading(true);
         const res = await fetch(`/api/listing/get/${params.listingId}`)
         const data = await res.json();
@@ -42,19 +41,18 @@ useEffect(()=>{
         }
         setListing(data.listing);
         setLoading(false);
-        // console.log(data);
+     
         
      } catch(error){
         setError(true);
         setLoading(true);
-        // console.log(error);
+       
      }
     }
     fetchListing();
 },[params.listingId])
 
-// console.log(listing,"he");
-// console.log(currUser.user,"helo");
+
     return (
          <main>
            {loading && <p>Loading...</p>}

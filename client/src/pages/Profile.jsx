@@ -210,7 +210,7 @@ function Profile(){
                   />
                 
                <button disabled={loading} className="bg-slate-700 uppercase p-3 font-semibold text-white rounded-lg
-                hover:opacity-90 disabled:opacity-75">{loading ? 'Loading..' : 'Update'}</button>
+                hover:opacity-90 disabled:opacity-75 cursor-pointer">{loading ? 'Loading..' : 'Update'}</button>
                 <Link to={'/create-listing'} 
                   className="bg-green-700 uppercase p-3 font-semibold text-white rounded-lg
                 hover:opacity-90 disabled:opacity-75 text-center"
@@ -227,7 +227,7 @@ function Profile(){
               </div>
 
               <button onClick={handleShowListing}
-               className='text-green-700 mt-5 w-full'>Show Listing</button>
+               className='text-green-700 mt-5 w-full cursor-pointer'>Show Listing</button>
                 
                 <p className='text-red-700 mt-5'>
                   {showListingError ?  'Error showing listings' : ''}</p>

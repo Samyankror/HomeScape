@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 
 
 function Contact({listing}){
-
+     
     const [landlord,setLandlord] = useState(null);
     const [message,setMessage] = useState("");
     
@@ -15,16 +15,17 @@ function Contact({listing}){
     useEffect(()=>{
          const fetchLandlord = async()=>{
             try{
-              const res = await fetch(`/api/user/${listing.userRef}`)
+              
+              const res = await fetch(`/api/user/${listing.userRef}`);
               const data = await res.json();
                setLandlord(data);
             }catch(error){
-                console.log(error);
+                console.log(error.message);
             }
          }
          fetchLandlord();
     },[listing.userRef]);
-    console.log(landlord)
+   
     return (
         <>
         {landlord && (
@@ -39,7 +40,7 @@ function Contact({listing}){
               value={message}
               onChange={onChange}
               placeholder='Enter your message here...'
-              className='w-full border p-3 rounded-lg'
+              className='w-full border p-3 rounded-lg '
             ></textarea>
 
             <Link

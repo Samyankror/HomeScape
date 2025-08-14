@@ -45,7 +45,7 @@ function SignUp() {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-center text-3xl font-semibold my-7">Sign up</h1>
+      <h1 className="text-center text-3xl text-slate-700 font-semibold my-10">✨ Welcome to Homescape — Rent & Buy Your Dream Home</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input
           type="text"

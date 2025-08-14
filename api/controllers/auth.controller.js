@@ -3,6 +3,7 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/errorHandler.js";
 import jwt from "jsonwebtoken";
 
+
 export const signUp = async (req, res, next) => {
   const { username, email, password,photo} = req.body;
   const hashedPassowrd = bcryptjs.hashSync(password, 10);
@@ -21,11 +22,11 @@ export const signUp = async (req, res, next) => {
 
 export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
-
   try {
     const validUser = await User.findOne({ email });
-    console.log(validUser);
+
     if (!validUser) {
+      console.log("hello");
       return next(errorHandler(404, "user not found"));
     }
 

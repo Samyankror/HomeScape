@@ -35,9 +35,9 @@ function SignIn() {
       });
 
       const data = await res.json();
-
+       console.log(data);
       if (!data.success) {
-        dispatch(signInFailure(error.message));
+        dispatch(signInFailure(data.message));
         return;
       }
       dispatch(signInSuccess(data));
@@ -49,7 +49,7 @@ function SignIn() {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-center text-3xl font-semibold my-7">Sign In</h1>
+      <h1 className="text-center text-3xl text-slate-700 font-semibold my-10">Welcome Back to Homescape!</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input
           type="text"
