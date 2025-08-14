@@ -41,7 +41,7 @@ app.use((err, req, res,next) => {
 });
 
 const __dirname = path.resolve();
-console.log(__dirname);
+
 app.use(express.static(path.join(__dirname, "/client/dist")));
 app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));

@@ -26,7 +26,6 @@ export const signIn = async (req, res, next) => {
     const validUser = await User.findOne({ email });
 
     if (!validUser) {
-      console.log("hello");
       return next(errorHandler(404, "user not found"));
     }
 
@@ -39,7 +38,7 @@ export const signIn = async (req, res, next) => {
     }
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
-    res.cookie("accessToken", token, { httpOnly: true }).status(200).json({
+    res.cookie("accessToken", token, { httpOnly: true}).status(200).json({
       success: true,
       user: rest,
     });

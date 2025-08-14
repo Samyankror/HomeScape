@@ -21,7 +21,6 @@ function Home(){
             try{
               const res = await fetch('/api/listing/get?limit=15');
               const data = await res.json();
-              console.log(data,'gj');
               setRecentListings(data);
               fetchOfferListings();
             }catch(error){
