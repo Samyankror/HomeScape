@@ -54,7 +54,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       return res
-        .cookie("accessToken", token, { httpOnly: true })
+        .cookie("accessToken", token, { httpOnly: true,maxAge: 7 * 24 * 60 * 60 * 1000 })
         .status(200)
         .json({
           success: true,

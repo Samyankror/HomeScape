@@ -134,7 +134,7 @@ function Profile(){
             const res = await fetch(`/api/user/listings/${currUser.user._id}`)
             const data = await res.json();
             if(!data.success){
-              console.log("helo")
+              
               setShowListingError(true);
               return;
             }
