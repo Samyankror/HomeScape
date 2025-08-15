@@ -38,7 +38,7 @@ export const signIn = async (req, res, next) => {
     }
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
-    res.cookie("accessToken", token, { httpOnly: true}).status(200).json({
+    res.cookie("accessToken", token, { httpOnly: true,maxAge: 7 * 24 * 60 * 60 * 1000}).status(200).json({
       success: true,
       user: rest,
     });
@@ -77,7 +77,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
       return res
-        .cookie("accessToken", token, { httpOnly: true })
+        .cookie("accessToken", token, { httpOnly: true,maxAge: 7 * 24 * 60 * 60 * 1000 })
         .status(200)
         .json({
           success: true,
