@@ -50,6 +50,7 @@ export const signIn = async (req, res, next) => {
     if (!isPasswordCorrect) {
       return next(errorHandler(401, "invalid password"));
     }
+<<<<<<< HEAD
     const { accessToken, refreshToken } = generateAccessAndRefreshToken(
       validUser._id
     );
@@ -67,6 +68,14 @@ export const signIn = async (req, res, next) => {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .json({ success: true, user: rest });
+=======
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const { password: pass, ...rest } = validUser._doc;
+    res.cookie("accessToken", token, { httpOnly: true,maxAge: 7 * 24 * 60 * 60 * 1000}).status(200).json({
+      success: true,
+      user: rest,
+    });
+>>>>>>> 93eced9b060c6f880028878e5a6dc634544c3a09
   } catch (error) {
     next(error);
   }
@@ -118,6 +127,10 @@ export const google = async (req, res, next) => {
       await newUser.save();
       const { password: pass, refreshToken: refToken, ...rest } = newUser._doc;
       return res
+<<<<<<< HEAD
+=======
+        .cookie("accessToken", token, { httpOnly: true,maxAge: 7 * 24 * 60 * 60 * 1000 })
+>>>>>>> 93eced9b060c6f880028878e5a6dc634544c3a09
         .status(200)
         .cookie("accessToken", accessToken, {
           httpOnly: true,
