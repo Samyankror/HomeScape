@@ -3,11 +3,15 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/errorHandler.js";
 import jwt from "jsonwebtoken";
 
-
 export const signUp = async (req, res, next) => {
-  const { username, email, password,photo} = req.body;
-  const hashedPassowrd = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassowrd,photo});
+  const { username, email, password, photo } = req.body;
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword,
+    avatar: photo,
+  });
 
   try {
     await newUser.save();
@@ -18,6 +22,16 @@ export const signUp = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+const generateAccessAndRefreshToken = (id) => {
+  const accessToken = jwt.sign({ id }, process.env.JWT_SECRET_ACCESS, {
+    expiresIn: "15m",
+  });
+  const refreshToken = jwt.sign({ id }, process.env.JWT_SECRET_REFRESH, {
+    expiresIn: "7d",
+  });
+
+  return { accessToken, refreshToken };
 };
 
 export const signIn = async (req, res, next) => {
@@ -36,12 +50,23 @@ export const signIn = async (req, res, next) => {
     if (!isPasswordCorrect) {
       return next(errorHandler(401, "invalid password"));
     }
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-    const { password: pass, ...rest } = validUser._doc;
-    res.cookie("accessToken", token, { httpOnly: true}).status(200).json({
-      success: true,
-      user: rest,
-    });
+    const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+      validUser._id
+    );
+    validUser.refreshToken = refreshToken;
+    await validUser.save();
+    const { password: pass, refreshToken: refToken, ...rest } = validUser._doc;
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000,
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      })
+      .json({ success: true, user: rest });
   } catch (error) {
     next(error);
   }
@@ -51,11 +76,22 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = user._doc;
+      const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+        user._id
+      );
+      user.refreshToken = refreshToken;
+      await user.save();
+      const { password: pass, refreshToken: refToken, ...rest } = user._doc;
       return res
-        .cookie("accessToken", token, { httpOnly: true,maxAge: 7 * 24 * 60 * 60 * 1000 })
         .status(200)
+        .cookie("accessToken", accessToken, {
+          httpOnly: true,
+          maxAge: 15 * 60 * 1000,
+        })
+        .cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
         .json({
           success: true,
           user: rest,
@@ -63,7 +99,7 @@ export const google = async (req, res, next) => {
     } else {
       const generatePassword =
         Math.random().toString(36).slice(-8) +
-        Math.random.toString(36).slice(-8);
+        Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
       const newUser = new User({
         username:
@@ -73,12 +109,24 @@ export const google = async (req, res, next) => {
         password: hashedPassword,
         avatar: req.body.photo,
       });
+
+      const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+        newUser._id
+      );
+
+      newUser.refreshToken = refreshToken;
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = newUser._doc;
+      const { password: pass, refreshToken: refToken, ...rest } = newUser._doc;
       return res
-        .cookie("accessToken", token, { httpOnly: true })
         .status(200)
+        .cookie("accessToken", accessToken, {
+          httpOnly: true,
+          maxAge: 15 * 60 * 1000,
+        })
+        .cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
         .json({
           success: true,
           user: rest,
@@ -91,10 +139,66 @@ export const google = async (req, res, next) => {
 
 export const signOut = async (req, res, next) => {
   try {
-    res
-      .clearCookie("accessToken", { httpOnly: true })
+    await User.findByIdAndUpdate(
+      req.body._id,
+      {
+        $unset: {
+          refreshToken: 1,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    return res
       .status(200)
+      .clearCookie("accessToken", { httpOnly: true })
+      .clearCookie("refreshToken", { httpOnly: true })
       .json({ success: true, message: "user has been logout" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const refreshToken = async (req, res, next) => {
+  const incomingRefreshToken = req.cookies.refreshToken;
+  if (!incomingRefreshToken) {
+    return next(errorHandler(401, "unauthorized request"));
+  }
+  try {
+    const decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.JWT_SECRET_REFRESH
+    );
+    const user = await User.findById(decodedToken?.id);
+
+    if (!user) {
+      return next(errorHandler(401, "Invalid refresh token"));
+    }
+
+    if (incomingRefreshToken !== user.refreshToken) {
+      return next(errorHandler(401, "refresh token is expired or used"));
+    }
+    const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+      user._id
+    );
+    user.refreshToken = refreshToken;
+    await user.save();
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000,
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      })
+      .json({
+        success: true,
+        message: "Access token refreshed",
+      });
   } catch (error) {
     next(error);
   }

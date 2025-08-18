@@ -10,6 +10,6 @@ const router = Router();
 router.route("/update/:id").post(verifyToken, updateUser);
 router.route("/delete/:id").delete(verifyToken, deleteUser);
 router.route("/listings/:id").get(verifyToken, getUserListing);
- router.route("/:id").get(verifyToken, getUser);
+router.route("/:id").get(verifyToken, getUser);
 
 export default router;

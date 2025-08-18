@@ -45,28 +45,31 @@ function SignUp() {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-center text-3xl text-slate-700 font-semibold my-10">✨ Welcome to Homescape — Rent & Buy Your Dream Home</h1>
+      <h1 className="text-center text-3xl text-slate-700 font-semibold my-10">
+        ✨ Welcome to Homescape — Rent & Buy Your Dream Home
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input
           type="text"
           placeholder="Username"
-          className=" p-3 bg-white  rounded-lg outline-none"
+          className=" p-3 bg-white  rounded-lg outline-black focus:outline-[3px]"
           id="username"
           onChange={handleChange}
         />
         <input
           type="text"
           placeholder="Email"
-          className=" p-3 bg-white  rounded-lg outline-none"
+          className=" p-3 bg-white  rounded-lg outline-black focus:outline-[3px]"
           id="email"
           onChange={handleChange}
         />
         <input
           type="password"
           placeholder="Password"
-          className=" p-3 bg-white  rounded-lg outline-none"
+          className=" p-3 bg-white  rounded-lg outline-black focus:outline-[3px]"
           id="password"
           onChange={handleChange}
+          autoComplete="off"
         />
         <button
           disabled={loading}

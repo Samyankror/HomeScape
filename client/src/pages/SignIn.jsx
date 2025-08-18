@@ -35,7 +35,6 @@ function SignIn() {
       });
 
       const data = await res.json();
-       console.log(data);
       if (!data.success) {
         dispatch(signInFailure(data.message));
         return;
@@ -49,21 +48,24 @@ function SignIn() {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-center text-3xl text-slate-700 font-semibold my-10">Welcome Back to Homescape!</h1>
+      <h1 className="text-center text-3xl text-slate-700 font-semibold my-10">
+        Welcome Back to Homescape!
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input
           type="text"
           placeholder="Email"
-          className=" p-3 bg-white  rounded-lg outline-none"
+          className=" p-3 bg-white  rounded-lg outline-black focus:outline-[3px]"
           id="email"
           onChange={handleChange}
         />
         <input
           type="password"
           placeholder="Password"
-          className=" p-3 bg-white  rounded-lg outline-none"
+          className=" p-3 bg-white  rounded-lg outline-black focus:outline-[3px]"
           id="password"
           onChange={handleChange}
+          autoComplete="off"
         />
         <button
           disabled={loading}

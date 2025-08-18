@@ -1,6 +1,5 @@
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 export const uploadImage = async (req, res, next) => {
-  
   if (!req.file) {
     return res
       .status(400)
