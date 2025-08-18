@@ -109,11 +109,12 @@ export const google = async (req, res, next) => {
         password: hashedPassword,
         avatar: req.body.photo,
       });
-
+       
+      await newUser.save();
       const { accessToken, refreshToken } = generateAccessAndRefreshToken(
         newUser._id
       );
-
+   
       newUser.refreshToken = refreshToken;
       await newUser.save();
       const { password: pass, refreshToken: refToken, ...rest } = newUser._doc;
