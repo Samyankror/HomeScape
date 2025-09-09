@@ -62,7 +62,8 @@ function Home() {
 
   return (
     <div>
-      <div className="flex flex-col gap-8 py-28 px-3 max-w-6xl mx-auto">
+      <div className='flex flex-col sm:flex-row '>
+      <div className="flex flex-col py-28 gap-8  px-3 max-w-6xl mx-auto">
         <h1 className="text-slate-700 font-bold text-6xl">
           Your dream home is <br />
           just a click away
@@ -81,6 +82,12 @@ function Home() {
         >
           Lets get started...
         </Link>
+      </div>
+       <div className='max-w-[700px] py-14 px-3 pr-6 rounded-lg'>
+        <img src="https://res.cloudinary.com/dltiymhzd/image/upload/v1757434449/ChatGPT_Image_Sep_9_2025_09_42_07_PM_uicyiq.png"/>
+
+       </div>
+
       </div>
 
       <Swiper navigation>
@@ -104,18 +111,22 @@ function Home() {
               <h2 className="text-2xl font-semibold text-slate-600 my-3">
                 Recently Listed offers
               </h2>
-              <Link
-                className="text-sm text-blue-800 hover:underline"
-                to={"/search?offer=true"}
-              >
-                Show more offers
-              </Link>
             </div>
             <div className="flex   flex-col  sm:flex-row sm:flex-wrap gap-4">
               {offerListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
+              {offerListings.length>=4 && 
+              <div className="flex justify-end pr-4">
+                    <Link
+                className="text-sm text-blue-800 hover:underline"
+                  to={"/search?offer=true"}
+                   >
+                   Show more offers
+                </Link>
+                 </div>}
+
           </div>
         )}
         {rentListings && rentListings.length > 0 && (
@@ -124,18 +135,22 @@ function Home() {
               <h2 className="text-2xl font-semibold text-slate-600 my-3">
                 Recently Listed places for rent
               </h2>
-              <Link
-                className="text-sm text-blue-800 hover:underline"
-                to={"/search?type=rent"}
-              >
-                Show more places for rent
-              </Link>
-            </div>
+             </div>
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               {rentListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
+            {rentListings.length>=4 && 
+              <div className="flex justify-end pr-4">
+                    <Link
+                className="text-sm text-blue-800 hover:underline"
+                  to={"/search?offer=true"}
+                   >
+                   Show more places for rent
+                </Link>
+                 </div>}
+
           </div>
         )}
         {saleListings && saleListings.length > 0 && (
@@ -144,18 +159,21 @@ function Home() {
               <h2 className="text-2xl font-semibold text-slate-600 my-3">
                 Recently Listed places for Sale
               </h2>
-              <Link
-                className="text-sm text-blue-800 hover:underline"
-                to={"/search?type=sale"}
-              >
-                Show more places for sale
-              </Link>
             </div>
             <div className="flex  flex-col sm:flex-row sm:flex-wrap gap-4">
               {saleListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
+            {rentListings.length>=4 && 
+              <div className="flex justify-end pr-4">
+                    <Link
+                className="text-sm text-blue-800 hover:underline"
+                  to={"/search?offer=true"}
+                   >
+                   Show more places for sale
+                </Link>
+                 </div>}
           </div>
         )}
       </div>

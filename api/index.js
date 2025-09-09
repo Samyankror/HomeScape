@@ -7,12 +7,14 @@ import cookieParser from "cookie-parser";
 import listingRouter from "./routes/listing.route.js";
 import uploadImageRouter from "./routes/upload.routes.js";
 import path from "path";
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
 
 
 mongoose

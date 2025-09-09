@@ -47,7 +47,11 @@ function SignIn() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
+     <div
+      className="h-screen bg-cover bg-center flex items-center justify-center"
+      style={{ backgroundImage: `url('https://res.cloudinary.com/dltiymhzd/image/upload/v1757431959/360_F_355607062_zYMS8jaz4SfoykpWz5oViRVKL32IabTP_1_hmnob5.jpg')` }}
+    >
+    <div className="p-3 max-w-lg ">
       <h1 className="text-center text-3xl text-slate-700 font-semibold my-10">
         Welcome Back to Homescape!
       </h1>
@@ -83,6 +87,7 @@ function SignIn() {
       </div>
 
       <div>{error && <p className="text-red-500 mt-5">{error}</p>}</div>
+    </div>
     </div>
   );
 }

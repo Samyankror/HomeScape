@@ -30,9 +30,9 @@ function Header(){
         <header className='bg-slate-200'>
             <div className = "flex flex-col  gap-3 sm:flex-row justify-between items-center max-w-6xl mx-auto p-3">
                 <Link to='/'>
-            <h1 className="font-bold text-xl">
-                <span className="text-slate-500">Home</span>
-                <span className="text-slate-700">Scape</span>
+            <h1 className="font-bold text-2xl">
+                <span className="text-slate-500 ">Home</span>
+                <span className="text-slate-700 ">Scape</span>
             </h1>
             </Link>
             <form  onSubmit={handleSubmit}
@@ -49,10 +49,10 @@ function Header(){
             </form>
             <ul className="flex  gap-6 sm:gap-4 ">
                 <Link to='/'>
-                <li className="text-slate-700 hover:underline font-semibold">Home</li>
+                <li className="text-slate-700 hover:underline text-xl font-semibold">Home</li>
                 </Link>
                 <Link to='/About'>
-                <li className="text-slate-700 hover:underline font-semibold">About</li>
+                <li className="text-slate-700 hover:underline text-xl font-semibold">About</li>
                 </Link>
                 
                <Link to='/profile' >{ currUser ?

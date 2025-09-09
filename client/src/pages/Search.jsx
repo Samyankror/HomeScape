@@ -154,7 +154,7 @@ function Search() {
                 id="all"
                 checked={sidebarData.type === "all"}
                 onChange={handleChange}
-                className="w-5 h-5"
+                className="w-5 h-5 cursor-pointer"
               />
               <label htmlFor="all" className="font-semibold">
                 Rent&Sale
@@ -166,7 +166,7 @@ function Search() {
                 id="rent"
                 checked={sidebarData.type === "rent"}
                 onChange={handleChange}
-                className="w-5 h-5"
+                className="w-5 h-5 cursor-pointer"
               />
               <label htmlFor="rent" className="font-semibold">
                 Rent
@@ -178,7 +178,7 @@ function Search() {
                 id="sale"
                 checked={sidebarData.type === "sale"}
                 onChange={handleChange}
-                className="w-5 h-5"
+                className="w-5 h-5 cursor-pointer"
               />
               <label htmlFor="sale" className="font-semibold">
                 Sale
@@ -190,7 +190,7 @@ function Search() {
                 id="offer"
                 checked={sidebarData.offer}
                 onChange={handleChange}
-                className="w-5 h-5"
+                className="w-5 h-5 cursor-pointer"
               />
               <label htmlFor="offer" className="font-semibold">
                 Offer
@@ -206,7 +206,7 @@ function Search() {
                 id="parking"
                 checked={sidebarData.parking}
                 onChange={handleChange}
-                className="w-5 h-5"
+                className="w-5 h-5 cursor-pointer"
               />
               <label htmlFor="parking" className="font-semibold">
                 Parking
@@ -218,7 +218,7 @@ function Search() {
                 id="furnished"
                 checked={sidebarData.furnished}
                 onChange={handleChange}
-                className="w-5 h-5"
+                className="w-5 h-5 cursor-pointer"
               />
               <label htmlFor="furnished" className="font-semibold">
                 Furnished
@@ -229,9 +229,9 @@ function Search() {
           <div>
             <label className="font-semibold p-2">Sort:</label>
             <select
-              id="sort-order"
+              id="sort-order "
               onChange={handleChange}
-              className="bg-white p-2 rounded-lg"
+              className="bg-white p-2 rounded-lg cursor-pointer"
             >
               <option value="regularPrice_desc">Price high to Low</option>
               <option value="regularPrice_asc">Price low to high</option>

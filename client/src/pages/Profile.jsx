@@ -177,7 +177,12 @@ function Profile() {
   console.log(userListings);
   return (
     <>
-      <div className="p-3 max-w-lg mx-auto mt-7">
+       <div
+      className="min-h-screen bg-cover bg-center flex justify-center"
+      style={{ backgroundImage: `url(https://res.cloudinary.com/dltiymhzd/image/upload/v1757438076/abstract-gradient-background-wallpaper_792836-371248_lxucxo.jpg)`}}
+     
+    >
+      <div className="p-3 z-10  sm:min-w-[400px] mt-7">
         <h1 className="mt-3 text-3xl font-bold text-center">Profile</h1>
         <form className="flex flex-col gap-4 mt-4" onSubmit={handleSubmit}>
           <input
@@ -265,7 +270,7 @@ function Profile() {
 
         <button
           onClick={handleShowListing}
-          className="text-green-700 mt-5 w-full cursor-pointer"
+          className="text-green-800 mt-5 w-full font-semibold cursor-pointer"
         >
           Show Listing
         </button>
@@ -281,7 +286,7 @@ function Profile() {
             </h1>
 
             {userListings.map((listing) => (
-              <div key={listing._id} className="flex gap-4">
+              <div key={listing._id} className="flex gap-4 bg-blue-200 rounded-md p-4">
                 <Link to={`/listing/${listing._id}`}>
                   <img
                     src={listing.imageUrls[0]}
@@ -292,7 +297,7 @@ function Profile() {
 
                 <Link
                   to={`/listing/${listing._id}`}
-                  className="text-slate-700 font-semibold  hover:underline truncate flex-1 "
+                  className="text-black font-semibold  hover:underline truncate flex-1 "
                 >
                   <p>{listing.name}</p>
                 </Link>
@@ -314,6 +319,7 @@ function Profile() {
             ))}
           </div>
         )}
+      </div>
       </div>
     </>
   );

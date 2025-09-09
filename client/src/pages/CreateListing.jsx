@@ -305,12 +305,12 @@ function CreateListing() {
               id="images"
               accept="image/*"
               multiple
-              className="p-3 border border-gray-300 rounded w-full"
+              className="p-3 border border-gray-300 rounded w-full "
               onChange={(e) => setFile(e.target.files)}
             />
 
             <button
-              className="text-green-700 border-2 font-semibold border-green-700 p-3 "
+              className="text-green-700 border-2 font-semibold border-green-700 p-3 cursor-pointer"
               onClick={handleImageSubmit}
             >
               upload
@@ -338,7 +338,7 @@ function CreateListing() {
 
           <button
             disabled={upload || loading}
-            className="my-4 p-3 bg-slate-700  text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-55"
+            className="my-4 p-3 bg-slate-700 cursor-pointer text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-55"
           >
             {loading ? "Creating..." : "Create Listing"}
           </button>
